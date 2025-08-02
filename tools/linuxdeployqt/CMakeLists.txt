@@ -30,9 +30,24 @@ target_include_directories(linuxdeployqt PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(linuxdeployqt Qt${QT_VERSION_MAJOR}::Core)
 target_compile_definitions(linuxdeployqt PRIVATE -DEXCLUDELIST="${EXCLUDELIST}")
 
-install(TARGETS linuxdeployqt RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR})
+install(TARGETS linuxdeployqt EXPORT linuxdeployqtTargets RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR})
 
 install(EXPORT linuxdeployqtTargets
-        DESTINATION lib/cmake/linuxdeployqt
+        DESTINATION share/cmake/linuxdeployqt
         NAMESPACE Qt${QT_VERSION_MAJOR}::
+)
+
+include(CMakePackageConfigHelpers)
+
+# generate the config file that includes the exports
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+  "${CMAKE_CURRENT_BINARY_DIR}/linuxdeployqtConfig.cmake"
+  INSTALL_DESTINATION "share/cmake/linuxdeployqt"
+  NO_SET_AND_CHECK_MACRO
+  NO_CHECK_REQUIRED_COMPONENTS_MACRO
+)
+
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/linuxdeployqtConfig.cmake
+  DESTINATION share/cmake/linuxdeployqt
 )
