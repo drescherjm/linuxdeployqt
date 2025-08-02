@@ -31,3 +31,8 @@ target_link_libraries(linuxdeployqt Qt${QT_VERSION_MAJOR}::Core)
 target_compile_definitions(linuxdeployqt PRIVATE -DEXCLUDELIST="${EXCLUDELIST}")
 
 install(TARGETS linuxdeployqt RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR})
+
+install(EXPORT linuxdeployqtTargets
+        DESTINATION lib/cmake/linuxdeployqt
+        NAMESPACE Qt${QT_VERSION_MAJOR}::
+)
